@@ -1,7 +1,7 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-inline void printLog(const char *msg, ...)
+inline void printLog(const char *msg, ...) // wanted to modify this to print to the browser with EM_ASM_, but it already prints fine, so that's wonderful :)
 {
     if (engineDebugMode) {
         char buffer[0x100];
@@ -14,14 +14,9 @@ inline void printLog(const char *msg, ...)
         sprintf(buffer, "%s\n", buffer);
 
         char pathBuffer[0x100];
-#if RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_UWP
-        if (!usingCWD)
-            sprintf(pathBuffer, "%s/log.txt", getResourcesPath());
-        else
-            sprintf(pathBuffer, "log.txt");
-#else
+
         sprintf(pathBuffer, BASE_PATH"log.txt");
-#endif
+
         FileIO *file = fOpen(pathBuffer, "a");
         if (file) {
             fWrite(&buffer, 1, StrLength(buffer), file);

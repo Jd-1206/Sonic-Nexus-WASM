@@ -49,6 +49,7 @@ SDL_AudioDeviceID audioDevice;
 
 int InitAudioPlayback()
 {
+    SDL_InitSubSystem(SDL_INIT_AUDIO); // so that's why the audio wasn't playing...
     StopAllSfx(); //"init"
 #if RETRO_USING_SDL1 || RETRO_USING_SDL2
     SDL_AudioSpec want;
@@ -158,6 +159,7 @@ size_t readVorbis(void *mem, size_t size, size_t nmemb, void *ptr)
     MusicPlaybackInfo *info = (MusicPlaybackInfo *)ptr;
     return FileRead2(&info->fileInfo, mem, (int)(size * nmemb), true);
 }
+
 int seekVorbis(void *ptr, ogg_int64_t offset, int whence)
 {
     MusicPlaybackInfo *info = (MusicPlaybackInfo *)ptr;
@@ -170,11 +172,13 @@ int seekVorbis(void *ptr, ogg_int64_t offset, int whence)
     SetFilePosition2(&info->fileInfo, (int)(whence + offset));
     return GetFilePosition2(&info->fileInfo) <= info->fileInfo.vFileSize;
 }
+
 long tellVorbis(void *ptr)
 {
     MusicPlaybackInfo *info = (MusicPlaybackInfo *)ptr;
     return GetFilePosition2(&info->fileInfo);
 }
+
 int closeVorbis(void *ptr)
 {
     MusicPlaybackInfo *info = (MusicPlaybackInfo *)ptr;
@@ -474,6 +478,7 @@ void SetMusicTrack(char *filePath, byte trackID, bool loop)
     track->trackLoop = loop;
     UnlockAudioDevice();
 }
+
 bool PlayMusic(int track)
 {
     if (!audioEnabled)
@@ -558,6 +563,7 @@ void LoadSfx(char *filePath, byte sfxID)
 #endif
     }
 }
+
 void PlaySfx(int sfx, bool loop)
 {
     LockAudioDevice();
@@ -579,6 +585,7 @@ void PlaySfx(int sfx, bool loop)
         nextChannelPos = 0;
     UnlockAudioDevice();
 }
+
 void SetSfxAttributes(int sfx, int loopCount, sbyte pan)
 {
     LockAudioDevice();

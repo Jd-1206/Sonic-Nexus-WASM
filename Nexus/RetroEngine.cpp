@@ -1,4 +1,3 @@
-#include <emscripten.h>
 #include "RetroEngine.hpp"
 #if RETRO_PLATFORM == RETRO_UWP
 #include <winrt/base.h>

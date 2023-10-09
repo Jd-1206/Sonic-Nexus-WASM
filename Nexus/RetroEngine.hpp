@@ -131,6 +131,8 @@ enum RetroBytecodeFormat {
 #include "cocoaHelpers.hpp"
 #endif
 
+#include <emscripten.h>
+
 extern bool usingCWD;
 extern bool engineDebugMode;
 
@@ -209,7 +211,7 @@ public:
     bool borderless       = false;
     bool vsync            = false;
     bool enhancedScaling  = true; // enable enhanced scaling
-    int windowScale       = 2;
+    int windowScale       = 1;
     int refreshRate       = 60; // user-picked screen update rate
     int screenRefreshRate = 60; // hardware screen update rate
     int targetRefreshRate = 60; // game logic update rate
