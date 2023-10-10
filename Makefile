@@ -6,7 +6,6 @@ endif
 EMSCR_FLAGS := -o Build/index.html \
 --shell-file Build-Assets/Page.html \
 --preload-file settings.ini \
---preload-file Data.bin \
 -s TOTAL_MEMORY=128MB \
 -s ALLOW_MEMORY_GROWTH=1 \
 -s USE_SDL=2 \
@@ -15,7 +14,8 @@ EMSCR_FLAGS := -o Build/index.html \
 -s USE_OGG=1 \
 -s USE_VORBIS=1 \
 --bind \
--lm
+-lm \
+-s EXPORTED_FUNCTIONS="['_main', '_RSDKInitialize']" \
 
 CXXFLAGS_ALL += -MMD -MP -MF objects/$*.d $(shell pkg-config --cflags $(PKG_CONFIG_STATIC_FLAG) sdl2 vorbisfile vorbis) $(CXXFLAGS) 
 LDFLAGS_ALL += $(LDFLAGS)

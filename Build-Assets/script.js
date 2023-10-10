@@ -1,6 +1,7 @@
 var statusElement = document.getElementById('status');
 var loadingElement = document.getElementById('loading');
 var progressTrack = document.getElementById('ptrack');
+const fileUploadButton = document.getElementById('uploadFile');
 
 var Module = {
   print: (function () {
@@ -19,6 +20,7 @@ var Module = {
   onRuntimeInitialized: function () {
     loadingElement.style.display = "none";
   },
+  
   canvas: (() => {
     var canvas = document.getElementById('canvas');
 
@@ -81,3 +83,29 @@ window.onerror = () => {
     if (text) console.error('[post-exception status] ' + text);
   };
 };
+
+function handleFileUpload(event) {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.style.display = 'none';
+
+  fileInput.addEventListener('change', (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const fileData = event.target.result;
+
+        FS.writeFile('/Data.bin', new Uint8Array(fileData));
+        fileUploadButton.style.display = "none";
+        Module[_RSDKInitialize()];
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    }
+  });
+
+  fileInput.click();
+}
+
+fileUploadButton.addEventListener('click', handleFileUpload);

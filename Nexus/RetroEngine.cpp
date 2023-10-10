@@ -39,9 +39,7 @@ bool processEvents()
                     case SDL_WINDOWEVENT_CLOSE: Engine.gameMode = ENGINE_EXITGAME; return false;
                 }
                 break;
-            case SDL_CONTROLLERDEVICEADDED: 
-                controllerInit(Engine.sdlEvents.cdevice.which); 
-                break;
+            case SDL_CONTROLLERDEVICEADDED: controllerInit(Engine.sdlEvents.cdevice.which); break;
             case SDL_CONTROLLERDEVICEREMOVED: controllerClose(Engine.sdlEvents.cdevice.which); break;
             case SDL_APP_TERMINATING: Engine.gameMode = ENGINE_EXITGAME; break;
 #endif
