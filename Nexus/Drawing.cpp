@@ -25,7 +25,6 @@ int InitRenderDevice()
     Engine.pixelBuffer = new byte[SCREEN_XSIZE * SCREEN_YSIZE];
     memset(Engine.pixelBuffer, 0, (SCREEN_XSIZE * SCREEN_YSIZE) * sizeof(byte));
 
-#if RETRO_USING_SDL2
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
@@ -34,7 +33,7 @@ int InitRenderDevice()
     SDL_SetHint(SDL_HINT_WINRT_HANDLE_BACK_BUTTON, "1");
 
     byte flags      = 0;
-    Engine.window   = SDL_CreateWindow(gameTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_XSIZE * Engine.windowScale,
+    Engine.window   = SDL_CreateWindow(gameTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_XSIZE * 1,
                                      SCREEN_YSIZE * Engine.windowScale, SDL_WINDOW_ALLOW_HIGHDPI | flags);
     Engine.renderer = SDL_CreateRenderer(Engine.window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -87,65 +86,6 @@ int InitRenderDevice()
     else {
         printf("error: %s", SDL_GetError());
     }
-
-#if RETRO_PLATFORM == RETRO_iOS
-    SDL_RestoreWindow(Engine.window);
-    SDL_SetWindowFullscreen(Engine.window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    Engine.isFullScreen = true;
-#endif
-
-#endif
-
-#if RETRO_USING_SDL1
-    SDL_Init(SDL_INIT_EVERYTHING);
-
-    // SDL1.2 doesn't support hints it seems
-    // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-    // SDL_SetHint(SDL_HINT_RENDER_VSYNC, Engine.vsync ? "1" : "0");
-    // SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight");
-    // SDL_SetHint(SDL_HINT_WINRT_HANDLE_BACK_BUTTON, "1");
-
-    Engine.windowSurface = SDL_SetVideoMode(SCREEN_XSIZE * Engine.windowScale, SCREEN_YSIZE * Engine.windowScale, 32, SDL_SWSURFACE);
-    if (!Engine.windowSurface) {
-        printLog("ERROR: failed to create window!\nerror msg: %s", SDL_GetError());
-        return 0;
-    }
-    // Set the window caption
-    SDL_WM_SetCaption(gameTitle, NULL);
-
-    Engine.screenBuffer =
-        SDL_CreateRGBSurface(0, SCREEN_XSIZE * Engine.windowScale, SCREEN_YSIZE * Engine.windowScale, 16, 0xF800, 0x7E0, 0x1F, 0x00);
-
-    if (!Engine.screenBuffer) {
-        printLog("ERROR: failed to create screen buffer!\nerror msg: %s", SDL_GetError());
-        return 0;
-    }
-
-    /*Engine.screenBuffer2x = SDL_SetVideoMode(SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, 16, SDL_SWSURFACE);
-
-    if (!Engine.screenBuffer2x) {
-        printLog("ERROR: failed to create screen buffer HQ!\nerror msg: %s", SDL_GetError());
-        return 0;
-    }*/
-
-    if (Engine.startFullScreen) {
-        Engine.windowSurface =
-            SDL_SetVideoMode(SCREEN_XSIZE * Engine.windowScale, SCREEN_YSIZE * Engine.windowScale, 16, SDL_SWSURFACE | SDL_FULLSCREEN);
-        SDL_ShowCursor(SDL_FALSE);
-        Engine.isFullScreen = true;
-    }
-
-    // TODO: not supported in 1.2?
-    if (Engine.borderless) {
-        // SDL_RestoreWindow(Engine.window);
-        // SDL_SetWindowBordered(Engine.window, SDL_FALSE);
-    }
-
-    // SDL_SetWindowPosition(Engine.window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-
-    Engine.useHQModes = false; // disabled
-    Engine.borderless = false; // disabled
-#endif
 
     OBJECT_BORDER_X2 = SCREEN_XSIZE + 0x80;
     // OBJECT_BORDER_Y2 = SCREEN_YSIZE + 0x100;

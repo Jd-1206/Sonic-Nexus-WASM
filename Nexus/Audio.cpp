@@ -49,9 +49,9 @@ SDL_AudioDeviceID audioDevice;
 
 int InitAudioPlayback()
 {
-    SDL_InitSubSystem(SDL_INIT_AUDIO); // so that's why the audio wasn't playing...
+    SDL_InitSubSystem(SDL_INIT_AUDIO); // shouldn't SDL_INIT_EVERYTHING cover this or no?
     StopAllSfx(); //"init"
-#if RETRO_USING_SDL1 || RETRO_USING_SDL2
+
     SDL_AudioSpec want;
     want.freq     = AUDIO_FREQUENCY;
     want.format   = AUDIO_FORMAT;
@@ -59,30 +59,15 @@ int InitAudioPlayback()
     want.channels = AUDIO_CHANNELS;
     want.callback = ProcessAudioPlayback;
 
-    #if RETRO_USING_SDL2
     if ((audioDevice = SDL_OpenAudioDevice(nullptr, 0, &want, &audioDeviceFormat, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE)) > 0) {
         audioEnabled = true;
         SDL_PauseAudioDevice(audioDevice, 0);
     }
     else {
         printLog("Unable to open audio device: %s", SDL_GetError());
-        audioEnabled = false;
-        return true; // no audio but game wont crash now
-    }
-
-#elif RETRO_USING_SDL1
-    if (SDL_OpenAudio(&want, &audioDeviceFormat) == 0) {
         audioEnabled = true;
-        SDL_PauseAudio(0);
-    }
-    else {
-        printLog("Unable to open audio device: %s", SDL_GetError());
-        audioEnabled = false;
         return true; // no audio but game wont crash now
     }
-#endif // !RETRO_USING_SDL1
-
-#endif
 
     LoadGlobalSfx();
 
@@ -341,9 +326,7 @@ void ProcessAudioPlayback(void *userdata, Uint8 *stream, int len)
                     }
                 }
 
-#if RETRO_USING_SDL1 || RETRO_USING_SDL2
                 ProcessAudioMixing(mix_buffer, buffer, samples_done, sfxVolume, sfx->pan);
-#endif
             }
         }
 
@@ -492,7 +475,8 @@ bool PlayMusic(int track)
     }
     trackBuffer = track;
     musicStatus = MUSIC_LOADING;
-    SDL_CreateThread((SDL_ThreadFunction)LoadMusic, "LoadMusic", NULL);
+    LoadMusic(NULL); // oh
+    // SDL_CreateThread((SDL_ThreadFunction)LoadMusic, "LoadMusic", NULL);
     UnlockAudioDevice();
     return true;
 }

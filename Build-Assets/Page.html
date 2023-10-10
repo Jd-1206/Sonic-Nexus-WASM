@@ -1,94 +1,32 @@
 <!doctype html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>RETRO SONIC Engine</title>
-    <link rel="icon" href="Nexus.png" type="image/x-icon">
-    <style>
-      body {
-        background-color: black;
-        font-family: arial;
-        margin: 0;
-        padding: none;
-        overflow: hidden
-      }
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Retro-Sonic Engine v2</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 
-      .box { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
-      div.box { text-align: center; }      
-      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-      canvas.box { 
-        background-color: black;
-        border: 0px none; 
-        image-rendering: pixelated;
-        height: 100vh;
-      }
+  <link rel="icon" href="Nexus.png" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="256x256" href="Nexus.png">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="manifest" href="/manifest.webmanifest">
+</head>
 
-      /* literally got rid of basically all of the loading/debugging stuff, sorry :( */
-      /* gonna make custom ones */
+<body>
+<div class="loading-screen" id="loading">
+  <div class="box" id="status">Downloading...</div>
+  <div class="progress-container" id="pcontainer">
+    <div class="rail"></div>
+    <div class="track" id="ptrack"></div>
+  </div>
+</div>
 
+<canvas class="box" id="canvas" tabindex="-1"></canvas>
 
-    </style>
-  </head>
-  <body>
-
-    <div>
-        <canvas class="box" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-    </div>
-
-    <div class="box">
-      <prsogress value="0" max="100" id="progress" hidden=1></progress>
-    </div>
-
-    <script type='text/javascript'>
-      var progressElement = document.getElementById('progress');
-      var Module = {
-        
-
-        canvas: (() => {
-          var canvas = document.getElementById('canvas');
-
-          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-          // application robust, you may want to override this behavior before shipping!
-          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", (e) => { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
-
-          return canvas;
-        })(),
-        setStatus: (text) => {
-          if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
-          if (text === Module.setStatus.last.text) return;
-          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
-          var now = Date.now();
-          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
-          Module.setStatus.last.time = now;
-          Module.setStatus.last.text = text;
-          if (m) {
-            text = m[1];
-            progressElement.value = parseInt(m[2])*100;
-            progressElement.max = parseInt(m[4])*100;
-            progressElement.hidden = false;
-          } else {
-            progressElement.value = null;
-            progressElement.max = null;
-            progressElement.style.display = 'none';
-          }
-        },
-        totalDependencies: 0,
-        monitorRunDependencies: (left) => {
-          this.totalDependencies = Math.max(this.totalDependencies, left);
-          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
-        }
-      };
-      Module.setStatus('Downloading...');
-      window.onerror = (event) => {
-        // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
-        Module.setStatus('Exception thrown, see JavaScript console');
-        Module.setStatus = (text) => {
-          if (text) console.error('[post-exception status] ' + text);
-        };
-      };
-    </script>
-    {{{ SCRIPT }}}
-  </body>
+<script src="script.js"></script>
+{{{ SCRIPT }}}
+</body>
 </html>
