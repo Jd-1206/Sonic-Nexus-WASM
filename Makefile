@@ -16,6 +16,7 @@ EMSCR_FLAGS := -o Build/index.html \
 --bind \
 -lm \
 -s EXPORTED_FUNCTIONS="['_main', '_RSDKInitialize']" \
+-O3
 
 CXXFLAGS_ALL += -MMD -MP -MF objects/$*.d $(shell pkg-config --cflags $(PKG_CONFIG_STATIC_FLAG) sdl2 vorbisfile vorbis) $(CXXFLAGS) 
 LDFLAGS_ALL += $(LDFLAGS)

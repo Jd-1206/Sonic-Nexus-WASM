@@ -201,6 +201,8 @@ void RetroEngine::Init()
     int lower        = getLowerRate(targetRefreshRate, refreshRate);
     renderFrameIndex = targetRefreshRate / lower;
     skipFrameIndex   = refreshRate / lower;
+
+    SDL_Init(SDL_INIT_GAMECONTROLLER); // why yes, there is a better place for this
 }
 
 void RetroEngine::Run() // hope this basically works the same :)
@@ -243,19 +245,18 @@ void RetroEngine::Run() // hope this basically works the same :)
         FlipScreen();
         frameStep  = false;
     }
-
-/* nuh uh not rn
-    ReleaseAudioDevice();
-    ReleaseRenderDevice();
-    writeSettings();
+    else{
+        ReleaseAudioDevice();
+        ReleaseRenderDevice();
+        writeSettings();
 #if RETRO_USE_MOD_LOADER
-    saveMods();
+        saveMods();
 #endif
 
 #if RETRO_USING_SDL1 || RETRO_USING_SDL2
-    SDL_Quit();
+        SDL_Quit();
 #endif
-*/
+    }
 }
 
 bool RetroEngine::LoadGameConfig(const char *filePath)

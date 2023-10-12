@@ -1,11 +1,15 @@
+bool setLoop = false;
 #include "RetroEngine.hpp"
-int setLoop = 0;
 
-extern "C"{
+extern "C" {
     EMSCRIPTEN_KEEPALIVE void RSDKInitialize()
     {
-        Engine.Init();
-        emscripten_set_main_loop([] () { Engine.Run(); }, Engine.refreshRate, 1);
+	    Engine.Init();
+
+	    if (setLoop == false) {
+            setLoop = true;
+    	    emscripten_set_main_loop([] () { Engine.Run(); }, Engine.refreshRate, 1);
+    	}        
     }
 }
 
