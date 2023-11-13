@@ -1,4 +1,6 @@
-# Sonic Nexus (2008, RSDK) Decompilation - WASM
+# This repo is outdated, and will be deleted eventually, working on a little RSDK web port project that includes this :>
+
+Sonic Nexus (2008, RSDK) Decompilation - WASM
 WebAssembly 'port' of RDC's Sonic Nexus decompilation
 
 ![image](https://github.com/Jd-1206/Sonic-Nexus-WASM/assets/104047615/4a8e1e82-bc29-4c8a-a8f5-a81682e91350)
