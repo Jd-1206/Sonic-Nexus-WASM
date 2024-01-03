@@ -1,4 +1,4 @@
-# This repo is outdated, and will be deleted eventually, working on a little RSDK web port project that includes this :>
+# This repo is outdated, and will be deleted when RSDK-Library (all-in-one RSDK decomp WASM port) has a github repo
 
 Sonic Nexus (2008, RSDK) Decompilation - WASM
 WebAssembly 'port' of RDC's Sonic Nexus decompilation
@@ -8,9 +8,11 @@ WebAssembly 'port' of RDC's Sonic Nexus decompilation
 This readme is very basic right now, but I'll setup instructions eventually. If you already know how to compile it though, yeah (emscripten, make, python etc)
 
 # How to build
-* Clone the repo, add your settings.ini file, and then run the 'make' command from your terminal
+* Clone the repo, add your settings.ini file, and then run the 'make' command from your terminal (it's a bit more involved than this, no actua instructions sorry)
 
 # Known issues
 * The engine does NOT like uh... odd screen sizes
 
-# [Original repo](https://github.com/Rubberduckycooly/Sonic-Nexus-Decompilation)
+# There is just a bit of custom code in this repo, but the majority of it is from the original decomp authors (along with yknow, the original author/s of the RSDKv2 engine)
+
+# [RSDKv2 Decompilation](https://github.com/Rubberduckycooly/Sonic-Nexus-Decompilation)
